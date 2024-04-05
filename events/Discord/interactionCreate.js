@@ -1,11 +1,32 @@
 const { EmbedBuilder, InteractionType } = require("discord.js");
 const { useQueue } = require("discord-player");
+const fs = require("fs");
 
 module.exports = async (client, inter) => {
   await inter.deferReply();
   if (inter.type === InteractionType.ApplicationCommand) {
     const DJ = client.config.opt.DJ;
     const command = client.commands.get(inter.commandName);
+    const djCommands = fs.readdirSync("./commands/music").map((x) => {
+      return require(`../../commands/music/${x}`);
+    });
+    const isDjCommand = djCommands.some((cmd) => cmd.name === command.name);
+
+    const settings = JSON.parse(fs.readFileSync("./data/data.json"));
+    const sentInMusicChannel = settings.channel_id === inter.channelId;
+
+    if (isDjCommand && !sentInMusicChannel) {
+      return inter.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("#ff0000")
+            .setDescription(
+              `❌ | Music commands can only be used in <#${settings.channel_id}>`,
+            ),
+        ],
+        ephemeral: true,
+      });
+    }
 
     if (!command)
       return (
@@ -13,7 +34,7 @@ module.exports = async (client, inter) => {
           embeds: [
             new EmbedBuilder()
               .setColor("#ff0000")
-              .setDescription("❌ do NOT contact Maeve"),
+              .setDescription("❌ | Do NOT contact Maeve"),
           ],
           ephemeral: true,
         }),
@@ -28,7 +49,7 @@ module.exports = async (client, inter) => {
           new EmbedBuilder()
             .setColor("#ff0000")
             .setDescription(
-              `❌ | You need do not have the proper permissions to exacute this command`
+              `❌ | You need do not have the proper permissions to execute this command`,
             ),
         ],
         ephemeral: true,
@@ -37,7 +58,7 @@ module.exports = async (client, inter) => {
       DJ.enabled &&
       DJ.commands.includes(command) &&
       !inter.member._roles.includes(
-        inter.guild.roles.cache.find((x) => x.name === DJ.roleName).id
+        inter.guild.roles.cache.find((x) => x.name === DJ.roleName).id,
       )
     )
       return inter.editReply({
@@ -45,7 +66,7 @@ module.exports = async (client, inter) => {
           new EmbedBuilder()
             .setColor("#ff0000")
             .setDescription(
-              `❌ | This command is reserved For members with \`${DJ.roleName}\` `
+              `❌ | This command is reserved For members with \`${DJ.roleName}\` `,
             ),
         ],
         ephemeral: true,
