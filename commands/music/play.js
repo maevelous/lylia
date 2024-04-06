@@ -2,17 +2,6 @@ const { QueryType, useMainPlayer, useQueue } = require("discord-player");
 const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 const { updateQueue } = require("../../utils/queue");
 
-module.exports = (queue, track) => {
-  if (!client.config.app.loopMessage && queue.repeatMode !== 0) return;
-  const embed = new EmbedBuilder()
-    .setAuthor({
-      name: `Started playing ${track.title} in ${queue.channel.name} 🎧`,
-      iconURL: track.thumbnail,
-    })
-    .setColor("#2f3136");
-
-  queue.metadata.send({ embeds: [embed], components: [row1] });
-};
 module.exports = {
   name: "play",
   description: "play a song!",

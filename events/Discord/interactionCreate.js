@@ -4,6 +4,7 @@ const fs = require("fs");
 
 module.exports = async (client, inter) => {
   await inter.deferReply();
+
   if (inter.type === InteractionType.ApplicationCommand) {
     const DJ = client.config.opt.DJ;
     const command = client.commands.get(inter.commandName);
@@ -12,8 +13,13 @@ module.exports = async (client, inter) => {
     });
     const isDjCommand = djCommands.some((cmd) => cmd.name === command.name);
 
-    const settings = JSON.parse(fs.readFileSync("./data/data.json"));
-    const sentInMusicChannel = settings.channel_id === inter.channelId;
+    let settings;
+    try {
+      settings = JSON.parse(fs.readFileSync("./data/data.json"));
+    } catch {
+      settings = null;
+    }
+    const sentInMusicChannel = !!settings && settings.channel_id === inter.channelId;
 
     if (isDjCommand && !sentInMusicChannel) {
       return inter.editReply({
@@ -84,7 +90,7 @@ module.exports = async (client, inter) => {
       if (
         inter.guild.members.me.voice.channel &&
         inter.member.voice.channel.id !==
-          inter.guild.members.me.voice.channel.id
+        inter.guild.members.me.voice.channel.id
       )
         return inter.editReply({
           embeds: [
@@ -101,6 +107,7 @@ module.exports = async (client, inter) => {
     const customId = JSON.parse(inter.customId);
     const file_of_button = customId.ffb;
     const queue = useQueue(inter.guild);
+
     if (file_of_button) {
       delete require.cache[
         require.resolve(`../../src/buttons/${file_of_button}.js`)
