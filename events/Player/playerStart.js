@@ -1,37 +1,28 @@
-const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js');
+// const { EmbedBuilder } = require("discord.js");
+const { updateQueue } = require("../../utils/queue");
+const fs = require("fs");
+
+const setCurrentSong = (track) => {
+  const settings = JSON.parse(fs.readFileSync("./data/data.json"));
+  settings.current_song = track;
+  fs.writeFileSync("./data/data.json", JSON.stringify(settings, null, "\t"));
+};
+
 module.exports = (queue, track) => {
+  if (!client.config.app.loopMessage && queue.repeatMode !== 0) return;
 
-    if (!client.config.app.loopMessage && queue.repeatMode !== 0) return;
-    const embed = new EmbedBuilder()
-    .setAuthor({name: `Started playing ${track.title} in ${queue.channel.name} 🎧`, iconURL: track.thumbnail})
-    .setColor('#2f3136')
+  setCurrentSong(track);
+  updateQueue(queue);
 
-    const back = new ButtonBuilder()
-    .setLabel('Back')
-    .setCustomId(JSON.stringify({ffb: 'back'}))
-    .setStyle('Primary')
+  // uncomment this if you want the bot to announce each new song
+  /*
+  const embed = new EmbedBuilder()
+    .setAuthor({
+      name: `Started playing ${track.title} in ${queue.channel.name} 🎧`,
+      iconURL: track.thumbnail,
+    })
+    .setColor("#2f3136");
 
-    const skip = new ButtonBuilder()
-    .setLabel('Skip')
-    .setCustomId(JSON.stringify({ffb: 'skip'}))
-    .setStyle('Primary')
-
-    const resumepause = new ButtonBuilder()
-    .setLabel('Resume & Pause')
-    .setCustomId(JSON.stringify({ffb: 'resume&pause'}))
-    .setStyle('Danger')
-
-    const loop = new ButtonBuilder()
-    .setLabel('Loop')
-    .setCustomId(JSON.stringify({ffb: 'loop'}))
-    .setStyle('Secondary')
-    
-    const lyrics = new ButtonBuilder()
-    .setLabel('lyrics')
-    .setCustomId(JSON.stringify({ffb: 'lyrics'}))
-    .setStyle('Secondary')
-
-    const row1 = new ActionRowBuilder().addComponents(back, loop, resumepause, lyrics, skip)
-    queue.metadata.send({ embeds: [embed], components: [row1] })
-
-}
+  queue.metadata.send({ embeds: [embed] });
+  */
+};
