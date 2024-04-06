@@ -2,7 +2,6 @@ const fs = require("fs");
 const { AttachmentBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require("discord.js");
 const { QueryType, useMainPlayer } = require("discord-player");
 
-
 const back = new ButtonBuilder()
   .setEmoji("1226211287982411928")
   .setCustomId(JSON.stringify({ ffb: "back" }))
@@ -27,8 +26,6 @@ const lyrics = new ButtonBuilder()
   .setEmoji("1226208367479881778")
   .setCustomId(JSON.stringify({ ffb: "lyrics" }))
   .setStyle("Secondary");
-
-
 
 const updateQueue = async function(queue) {
   const attachmentDir = "./assets";

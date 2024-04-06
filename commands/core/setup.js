@@ -1,5 +1,6 @@
-const { EmbedBuilder, ChannelType, cleanContent } = require("discord.js");
 const fs = require("fs");
+const { AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { QueryType, useMainPlayer } = require("discord-player");
 
 module.exports = {
   name: "setup",
@@ -23,27 +24,34 @@ module.exports = {
       .catch(() => null);
     if (channel === null) return inter.editReply({ content: "Unknown Error" });
 
+    const attachmentDir = "./assets";
+    const assets = fs.readdirSync(attachmentDir);
+    const asset = new AttachmentBuilder(`${attachmentDir}/${assets[Math.floor(Math.random() * assets.length)]}`)
+    const assetName = asset.attachment.split("/")[2]
+
     const embed = new EmbedBuilder()
       .setTitle("No song currently playing")
-      .setImage(
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROjaqjTO_3NAOAynkH5-V1CN-WRjjkNMhhuFvPOywl0A&s",
-      )
+      .setImage(`attachment://${assetName}`)
       .setColor("Purple");
 
     const msg = await channel.send({
       embeds: [embed],
+      files: [asset],
       fetchReply: true,
     });
+
     const replyembed = new EmbedBuilder()
       .setTitle("Song request channel has been created!")
       .setDescription(
         `Created channel: <#${channel.id}>\n` +
-          `_You can rename and move this channel if you want to_\n` +
-          `Most of my music commands will only work in <#${channel.id}> from now on`,
+        `_You can rename and move this channel if you want to_\n` +
+        `Most of my music commands will only work in <#${channel.id}> from now on`,
       )
       .setColor("Purple");
 
-    inter.editReply({ embeds: [replyembed] });
+    inter.editReply({
+      embeds: [replyembed]
+    });
 
     const payload = {
       channel_id: channel.id,

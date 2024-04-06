@@ -8,7 +8,25 @@ module.exports = async (client) => {
 
   const player = useMainPlayer();
 
-  const settings = JSON.parse(fs.readFileSync("./data/data.json"));
+  const file = fs.existsSync("./data/data.json")
+    ? fs.readFileSync("./data/data.json")
+    : "{}";
+
+  let settings = JSON.parse(file);
+  if (Object.keys(settings).length === 0) {
+    settings = {
+      channel_id: null,
+      message_id: null,
+      current_song: null,
+    }
+
+    fs.mkdirSync("./data");
+    fs.writeFileSync("./data/data.json", JSON.stringify(settings, null, "\t"));
+  }
+
+  // these fields can be null even if the file existed
+  if (settings.channel_id === null || settings.message_id === null) return
+
   settings.current_song = null;
 
   const channelId = settings.channel_id;
