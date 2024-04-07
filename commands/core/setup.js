@@ -4,7 +4,7 @@ const { QueryType, useMainPlayer } = require("discord-player");
 
 module.exports = {
   name: "setup",
-  emphemeral: true,
+  ephemeral: true,
   description: "Setup the music channel",
   showHelp: false,
 
