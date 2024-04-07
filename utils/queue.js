@@ -23,8 +23,13 @@ const loop = new ButtonBuilder()
   .setStyle("Secondary");
 
 const lyrics = new ButtonBuilder()
-  .setEmoji("1226208367479881778")
+  .setEmoji("1226306894142898217")
   .setCustomId(JSON.stringify({ ffb: "lyrics" }))
+  .setStyle("Secondary");
+
+const shuffle = new ButtonBuilder()
+  .setEmoji("1226306894142898217")
+  .setCustomId(JSON.stringify({ ffb: "shuffle" }))
   .setStyle("Secondary");
 
 const updateQueue = async function(queue) {
@@ -32,7 +37,7 @@ const updateQueue = async function(queue) {
   const assets = fs.readdirSync(attachmentDir);
 
   const settings = JSON.parse(fs.readFileSync("./data/data.json"));
-  const channel = queue.metadata;
+  const channel = client.channels.cache.get(settings.channel_id);
   await channel.messages.fetch(settings.message_id).catch(() => null);
   const msg = channel.messages.cache.get(settings.message_id);
 
@@ -70,7 +75,7 @@ const updateQueue = async function(queue) {
     back,
     loop,
     resumepause,
-    lyrics,
+    shuffle,
     skip,
   );
 
@@ -86,7 +91,7 @@ const updateQueue = async function(queue) {
 
 const updateComponents = async function(queue, message) {
   const settings = JSON.parse(fs.readFileSync("./data/data.json"));
-  const channel = queue.metadata;
+  const channel = client.channels.cache.get(settings.channel_id);
   await channel.messages.fetch(settings.message_id).catch(() => null);
   const msg = channel.messages.cache.get(settings.message_id);
 
