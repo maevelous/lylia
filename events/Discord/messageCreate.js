@@ -10,11 +10,11 @@ module.exports = async (client, message) => {
   if (!config || !config.queue_channel_id) return;
 
   const musicChannelId = config.queue_channel_id;
-  const channelId = message.channelId;
+  const channelId = message.channel.id;
 
   const isMusicChannel = channelId === musicChannelId;
   const isBot = message.author.bot;
-  if (!isMusicChannel || isBot) return message.delete().catch(() => {});
+  if (!isMusicChannel || isBot) return
 
   const songName = message.content;
   
@@ -24,7 +24,6 @@ module.exports = async (client, message) => {
   if (botChannelId && userChannelId !== botChannelId) {
 	return message.delete().catch(() => {})
   }
-
 
   addSongToQueue(songName, message).then(() => {
     message.delete().catch(() => { });
