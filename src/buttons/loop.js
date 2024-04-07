@@ -1,4 +1,6 @@
 const { QueueRepeatMode } = require('discord-player');
+const { updateQueue } = require('../../utils/queue');
+
 module.exports = async ({ inter, queue }) => {
 
   const methods = ['disabled', 'track', 'queue'];
@@ -12,6 +14,8 @@ module.exports = async ({ inter, queue }) => {
   if (repeatMode === 1) queue.setRepeatMode(QueueRepeatMode.QUEUE)
 
   if (repeatMode === 2) queue.setRepeatMode(QueueRepeatMode.OFF)
+
+  updateQueue(queue);
 
   return inter.reply({
     content: `loop made has been set to **${methods[queue.repeatMode]}**.✅`,

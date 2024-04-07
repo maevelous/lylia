@@ -36,11 +36,17 @@ const updateQueue = async function(queue) {
   const asset = new AttachmentBuilder(`${attachmentDir}/${assets[Math.floor(Math.random() * assets.length)]}`)
   const assetName = asset.attachment.split("/")[3]
 
+  const methods = ['none', 'track', 'queue'];
+  const repeatMode = queue?.repeatMode
+  const repeatState = methods[repeatMode]
+
   const embed = new EmbedBuilder()
     .setTitle(!currentSong ? "Currently not playing" : "Now playing")
     .setColor(msg.embeds[0].color)
     .setImage(`attachment://${assetName}`)
-    .setFooter({ text: `Total songs in queue: ${queueLength} | Volume: ${queue.node.volume}%` })
+    .setFooter({
+      text: `Total songs in queue: ${queueLength} | Volume: ${queue.node.volume}% | Loop mode: ${repeatState}`,
+    })
   if (description) embed.setDescription(description)
 
   const buttonRow = getEmbedControls(queue.node.isPaused() ? "paused" : "playing");

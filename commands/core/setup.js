@@ -14,6 +14,11 @@ module.exports = {
   async execute({ client, inter }) {
     const queue = useQueue(inter.guild);
 
+    if (!inter.member.permissions.has("ADMINISTRATOR"))
+      return inter.editReply({
+        content: "Please ask an administrator to run the setup.",
+      });
+
     const channelExists = inter.guild.channels.cache.some(
       (ch) => ch.name === "lylia-music",
     );
@@ -28,7 +33,7 @@ module.exports = {
         type: ChannelType.GuildText,
       })
       .catch(() => null);
-    if (channel === null) return inter.editReply({ content: "Unknown Error" });
+    if (channel === null) return inter.editReply({ content: "Could not create channel." });
 
     const assets = fs.readdirSync("./assets/embed");
     const asset = new AttachmentBuilder(`./assets/embed/${assets[Math.floor(Math.random() * assets.length)]}`)
