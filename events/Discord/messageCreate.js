@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { addSongToQueue } = require("../../utils/queue");
 const { getGuildConfig } = require("../../utils/db");
-const { useQueue } = require("discord-player")
+const { useQueue } = require("discord-player");
 
 module.exports = async (client, message) => {
   const queue = useQueue(message.guild);
@@ -14,19 +14,18 @@ module.exports = async (client, message) => {
 
   const isMusicChannel = channelId === musicChannelId;
   const isBot = message.author.bot;
-  if (!isMusicChannel || isBot) return
+  if (!isMusicChannel || isBot) return;
 
   const songName = message.content;
-  
-  const botChannelId = queue.connection?.joinConfig.channelId;
+
+  const botChannelId = queue?.connection?.joinConfig.channelId;
   const userChannelId = message.member.voice?.channel.id;
 
   if (botChannelId && userChannelId !== botChannelId) {
-	return message.delete().catch(() => {})
+    return message.delete().catch(() => {});
   }
 
   addSongToQueue(songName, message).then(() => {
-    message.delete().catch(() => { });
-  })
+    message.delete().catch(() => {});
+  });
 };
-
