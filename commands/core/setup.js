@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ChannelType, EmbedBuilder } = require("discord.js");
-const { QueryType, useMainPlayer } = require("discord-player");
+const { QueryType, useQueue, useMainPlayer } = require("discord-player");
+const { updateQueue } = require("../../utils/queue");
 
 module.exports = {
   name: "setup",
@@ -9,6 +10,8 @@ module.exports = {
   showHelp: false,
 
   async execute({ client, inter }) {
+    const queue = useQueue(inter.guild);
+
     const channelExists = inter.guild.channels.cache.some(
       (ch) => ch.name === "lylia-music",
     );
@@ -66,5 +69,7 @@ module.exports = {
       current_song: null,
     };
     fs.writeFileSync("./data/data.json", JSON.stringify(payload, null, "\t"));
+    updateQueue(queue);
   },
 };
+
