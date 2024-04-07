@@ -4,6 +4,7 @@ const { updateQueue } = require("../../utils/queue");
 
 module.exports = {
   name: "remove",
+  ephemeral: true,
   description: "remove a song from the queue",
   voiceChannel: true,
   options: [

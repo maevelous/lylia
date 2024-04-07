@@ -3,11 +3,14 @@ const { useQueue } = require("discord-player");
 const fs = require("fs");
 
 module.exports = async (client, inter) => {
-  await inter.deferReply();
 
   if (inter.type === InteractionType.ApplicationCommand) {
     const DJ = client.config.opt.DJ;
     const command = client.commands.get(inter.commandName);
+    await inter.deferReply({
+      ephemeral: command.ephemeral
+    });
+
     const djCommands = fs.readdirSync("./commands/music").map((x) => {
       return require(`../../commands/music/${x}`);
     });
@@ -106,6 +109,7 @@ module.exports = async (client, inter) => {
   if (inter.type === InteractionType.MessageComponent) {
     const customId = JSON.parse(inter.customId);
     const file_of_button = customId.ffb;
+    console.log(file_of_button)
     const queue = useQueue(inter.guild);
 
     if (file_of_button) {

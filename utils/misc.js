@@ -7,13 +7,13 @@ const cleanChannel = async function(inter) {
   const channel = client.channels.cache.get(channelId);
   if (channelId !== musicChannelId) return;
 
-  const messageIdToKeep = settings.message_id;
+  const messagesToKeep = [settings.message_id, settings.banner_id]
 
   // Fetch the last 100 messages in the channel
   const fetched = await channel.messages.fetch({ limit: 100 });
 
   // Filter out the message you want to keep
-  const messagesToDelete = fetched.filter(m => m.id !== messageIdToKeep);
+  const messagesToDelete = fetched.filter(m => !messagesToKeep.includes(m.id));
 
   // Delete the messages
   channel.bulkDelete(messagesToDelete, true).catch(console.error);

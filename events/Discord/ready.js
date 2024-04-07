@@ -17,6 +17,7 @@ module.exports = async (client) => {
     settings = {
       channel_id: null,
       message_id: null,
+      banner_id: null,
       current_song: null,
     }
 

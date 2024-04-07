@@ -4,6 +4,7 @@ const { QueryType, useMainPlayer } = require("discord-player");
 
 module.exports = {
   name: "setup",
+  emphemeral: true,
   description: "Setup the music channel",
   showHelp: false,
 
@@ -24,15 +25,20 @@ module.exports = {
       .catch(() => null);
     if (channel === null) return inter.editReply({ content: "Unknown Error" });
 
-    const attachmentDir = "./assets";
-    const assets = fs.readdirSync(attachmentDir);
-    const asset = new AttachmentBuilder(`${attachmentDir}/${assets[Math.floor(Math.random() * assets.length)]}`)
-    const assetName = asset.attachment.split("/")[2]
+    const assets = fs.readdirSync("./assets/embed");
+    const asset = new AttachmentBuilder(`./assets/embed/${assets[Math.floor(Math.random() * assets.length)]}`)
+    const assetName = asset.attachment.split("/")[3]
+    const banner = new AttachmentBuilder(`./assets/banner.png`);
 
     const embed = new EmbedBuilder()
       .setTitle("No song currently playing")
       .setImage(`attachment://${assetName}`)
-      .setColor("Purple");
+      .setColor("#2B2D31");
+
+    const bannerMsg = await channel.send({
+      files: [banner],
+      fetchReply: true
+    });
 
     const msg = await channel.send({
       embeds: [embed],
@@ -56,6 +62,7 @@ module.exports = {
     const payload = {
       channel_id: channel.id,
       message_id: msg.id,
+      banner_id: bannerMsg.id,
       current_song: null,
     };
     fs.writeFileSync("./data/data.json", JSON.stringify(payload, null, "\t"));

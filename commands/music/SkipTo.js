@@ -3,6 +3,7 @@ const { useMainPlayer, useQueue } = require("discord-player");
 
 module.exports = {
   name: "skipto",
+  ephemeral: true,
   description: "skips to particular track in queue",
   voiceChannel: true,
   options: [

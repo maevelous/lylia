@@ -3,6 +3,7 @@ const { useMainPlayer, useQueue } = require('discord-player');
 
 module.exports = {
   name: 'pause',
+  ephemeral: true,
   description: 'pause the track',
   voiceChannel: true,
 
