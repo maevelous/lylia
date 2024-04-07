@@ -1,9 +1,12 @@
 const fs = require("fs");
 const { addSongToQueue } = require("../../utils/queue");
+const { getGuildConfig } = require("../../utils/db");
 
 module.exports = async (client, message) => {
-  const settings = JSON.parse(fs.readFileSync("./data/data.json"));
-  const musicChannelId = settings.channel_id;
+  const config = getGuildConfig(message.guild.id);
+  if (!config || !config.queue_channel_id) return;
+
+  const musicChannelId = config.queue_channel_id;
   const channelId = message.channelId;
 
   const isMusicChannel = channelId === musicChannelId;

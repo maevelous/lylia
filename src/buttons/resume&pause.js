@@ -1,13 +1,13 @@
 const { updateComponents } = require('../../utils/queue');
 
 module.exports = async ({ inter, queue }) => {
-  if (!queue || !queue.isPlaying()) return
+  if (!queue || !queue.isPlaying()) return inter.deferUpdate();
 
   const resumed = queue.node.resume();
   if (!resumed) {
     queue.node.pause();
   }
 
-  updateComponents(queue)
-  inter.deleteReply();
+  updateComponents(queue, inter.guildId)
+  inter.deferUpdate();
 }

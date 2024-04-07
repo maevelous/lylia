@@ -1,5 +1,5 @@
 const { updateQueue } = require("../../utils/queue.js");
-const fs = require("fs");
+const { getGuildConfig, updateCurrentSong } = require("../../utils/db.js");
 
 module.exports = (queue) => {
   /*
@@ -11,10 +11,8 @@ module.exports = (queue) => {
 
   queue.metadata.send({ embeds: [Disconnect] });
   */
-
-  const settings = JSON.parse(fs.readFileSync("./data/data.json"));
-  settings.current_song = null;
-  fs.writeFileSync("./data/data.json", JSON.stringify(settings, null, "\t"));
+  const config = getGuildConfig(queue.guild.id);
+  updateCurrentSong({ guild_id: config.id, song: null });
 
   updateQueue();
 };

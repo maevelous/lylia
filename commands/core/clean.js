@@ -1,4 +1,5 @@
 const { cleanChannel } = require("../../utils/misc")
+
 module.exports = {
   name: 'clean',
   emphemeral: false,

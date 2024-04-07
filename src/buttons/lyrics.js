@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 module.exports = async ({ client, inter, queue }) => {
-  if (!queue || !queue.isPlaying()) return inter.editReply({ content: `No music currently playing... try again ? ❌`, ephemeral: true });
+  if (!queue || !queue.isPlaying()) return inter.deferUpdate();
 
   try {
     const search = await genius.songs.search(queue.currentTrack.title);

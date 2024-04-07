@@ -1,6 +1,7 @@
 const { Player } = require("discord-player");
 const Genius = require("genius-lyrics");
 const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const { initDB } = require("./utils/db");
 
 global.client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
@@ -21,5 +22,7 @@ global.genius = new Genius.Client();
 player.extractors.loadDefault();
 
 require("./src/loader");
+
+initDB();
 
 client.login(client.config.app.token);

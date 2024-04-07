@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 module.exports = async ({ client, inter, queue }) => {
-  if (!queue || !queue.isPlaying()) return
+  if (!queue || !queue.isPlaying()) return inter.deferUpdate();
 
   queue.delete();
 
@@ -10,5 +10,5 @@ module.exports = async ({ client, inter, queue }) => {
 
 
   // return inter.editReply({ embeds: [StopEmbed], ephemeral: true });
-  inter.deleteReply();
+  inter.deferUpdate();
 }

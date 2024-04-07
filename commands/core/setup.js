@@ -1,7 +1,9 @@
 const fs = require("fs");
-const { AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ChannelType, EmbedBuilder } = require("discord.js");
-const { QueryType, useQueue, useMainPlayer } = require("discord-player");
+const { AttachmentBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { useQueue } = require("discord-player");
 const { updateQueue } = require("../../utils/queue");
+const { insertGuild } = require("../../utils/db");
+const { getEmbedControls } = require("../../utils/misc");
 
 module.exports = {
   name: "setup",
@@ -34,7 +36,7 @@ module.exports = {
     const banner = new AttachmentBuilder(`./assets/banner.png`);
 
     const embed = new EmbedBuilder()
-      .setTitle("No song currently playing")
+      .setTitle("Currently not playing")
       .setImage(`attachment://${assetName}`)
       .setColor("#2B2D31");
 
@@ -44,9 +46,11 @@ module.exports = {
     });
 
     const msg = await channel.send({
+      content: "\uFEFF\n__**Queue**__:\nJoin a voice channel and send a song name in this channel or use the command to add it to the queue!",
       embeds: [embed],
       files: [asset],
       fetchReply: true,
+      components: [getEmbedControls()]
     });
 
     const replyembed = new EmbedBuilder()
@@ -63,12 +67,14 @@ module.exports = {
     });
 
     const payload = {
-      channel_id: channel.id,
-      message_id: msg.id,
-      banner_id: bannerMsg.id,
-      current_song: null,
+      id: inter.guild.id,
+      queue_channel_id: channel.id,
+      queue_message_id: msg.id,
+      queue_banner_id: bannerMsg.id,
+      song: null
     };
-    fs.writeFileSync("./data/data.json", JSON.stringify(payload, null, "\t"));
+
+    insertGuild(payload);
     updateQueue(queue);
   },
 };

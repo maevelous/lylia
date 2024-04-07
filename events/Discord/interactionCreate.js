@@ -1,6 +1,7 @@
 const { EmbedBuilder, InteractionType } = require("discord.js");
 const { useQueue } = require("discord-player");
 const fs = require("fs");
+const { getGuildConfig } = require("../../utils/db");
 
 module.exports = async (client, inter) => {
 
@@ -16,13 +17,8 @@ module.exports = async (client, inter) => {
     });
     const isDjCommand = djCommands.some((cmd) => cmd.name === command.name);
 
-    let settings;
-    try {
-      settings = JSON.parse(fs.readFileSync("./data/data.json"));
-    } catch {
-      settings = null;
-    }
-    const sentInMusicChannel = !!settings && settings.channel_id === inter.channelId;
+    const config = getGuildConfig(inter.guildId);
+    const sentInMusicChannel = !!config && config.queue_channel_id === inter.channelId;
 
     if (isDjCommand && !sentInMusicChannel) {
       return inter.editReply({
@@ -30,7 +26,7 @@ module.exports = async (client, inter) => {
           new EmbedBuilder()
             .setColor("#ff0000")
             .setDescription(
-              `❌ | Music commands can only be used in <#${settings.channel_id}>`,
+              `❌ | Music commands can only be used in <#${config.queue_channel_id}>`,
             ),
         ],
         ephemeral: true,
@@ -109,7 +105,6 @@ module.exports = async (client, inter) => {
   if (inter.type === InteractionType.MessageComponent) {
     const customId = JSON.parse(inter.customId);
     const file_of_button = customId.ffb;
-    console.log(file_of_button)
     const queue = useQueue(inter.guild);
 
     if (file_of_button) {
