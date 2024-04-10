@@ -4,6 +4,7 @@ const { useQueue } = require("discord-player");
 const { updateQueue } = require("../../utils/queue");
 const { insertGuild } = require("../../utils/db");
 const { getEmbedControls } = require("../../utils/misc");
+const { colors } = require("../../utils/entities");
 
 module.exports = {
   name: "setup",
@@ -33,42 +34,46 @@ module.exports = {
         type: ChannelType.GuildText,
       })
       .catch(() => null);
-    if (channel === null) return inter.editReply({ content: "Could not create channel." });
+    if (channel === null)
+      return inter.editReply({ content: "Could not create channel." });
 
     const assets = fs.readdirSync("./assets/embed");
-    const asset = new AttachmentBuilder(`./assets/embed/${assets[Math.floor(Math.random() * assets.length)]}`)
-    const assetName = asset.attachment.split("/")[3]
+    const asset = new AttachmentBuilder(
+      `./assets/embed/${assets[Math.floor(Math.random() * assets.length)]}`,
+    );
+    const assetName = asset.attachment.split("/")[3];
     const banner = new AttachmentBuilder(`./assets/banner.png`);
 
     const embed = new EmbedBuilder()
       .setTitle("Currently not playing")
       .setImage(`attachment://${assetName}`)
-      .setColor("#2B2D31");
+      .setColor(colors.default);
 
     const bannerMsg = await channel.send({
       files: [banner],
-      fetchReply: true
+      fetchReply: true,
     });
 
     const msg = await channel.send({
-      content: "\uFEFF\n__**Queue**__:\nJoin a voice channel and send a song name in this channel or use the command to add it to the queue!",
+      content:
+        "\uFEFF\n__**Queue**__:\nJoin a voice channel and send a song name in this channel or use the command to add it to the queue!",
       embeds: [embed],
       files: [asset],
       fetchReply: true,
-      components: [getEmbedControls()]
+      components: [getEmbedControls()],
     });
 
     const replyembed = new EmbedBuilder()
       .setTitle("Song request channel has been created!")
       .setDescription(
         `Created channel: <#${channel.id}>\n` +
-        `_You can rename and move this channel if you want to_\n` +
-        `Most of my music commands will only work in <#${channel.id}> from now on`,
+          `_You can rename and move this channel if you want to_\n` +
+          `Most of my music commands will only work in <#${channel.id}> from now on`,
       )
-      .setColor("Purple");
+      .setColor(colors.default);
 
     inter.editReply({
-      embeds: [replyembed]
+      embeds: [replyembed],
     });
 
     const payload = {
@@ -76,11 +81,10 @@ module.exports = {
       queue_channel_id: channel.id,
       queue_message_id: msg.id,
       queue_banner_id: bannerMsg.id,
-      song: null
+      song: null,
     };
 
     insertGuild(payload);
     updateQueue(queue);
   },
 };
-
