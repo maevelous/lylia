@@ -14,5 +14,5 @@ module.exports = (queue) => {
   const config = getGuildConfig(queue.guild.id);
   updateCurrentSong({ guild_id: config.id, song: null });
 
-  updateQueue();
+  updateQueue(queue);
 };
