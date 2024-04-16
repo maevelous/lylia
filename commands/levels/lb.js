@@ -13,7 +13,7 @@ module.exports = {
     const entries = getAllUsers();
     const sorted = entries.sort((a, b) => b.xp - a.xp);
     const res = sorted.map((x, i) => {
-      return `${i + 1}. <@${x.id}> - Level ${expToLevels(x.xp)} - ${x.xp} XP`;
+      return `<@${x.id}> - Level ${expToLevels(x.xp)} - ${x.xp} XP`;
     });
 
     const paginator = new Paginator();
