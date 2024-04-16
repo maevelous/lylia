@@ -4,12 +4,11 @@ const fs = require("fs");
 const { getGuildConfig } = require("../../utils/db");
 
 module.exports = async (client, inter) => {
-
   if (inter.type === InteractionType.ApplicationCommand) {
     const DJ = client.config.opt.DJ;
     const command = client.commands.get(inter.commandName);
     await inter.deferReply({
-      ephemeral: command.ephemeral
+      ephemeral: command.ephemeral,
     });
 
     const djCommands = fs.readdirSync("./commands/music").map((x) => {
@@ -18,7 +17,8 @@ module.exports = async (client, inter) => {
     const isDjCommand = djCommands.some((cmd) => cmd.name === command.name);
 
     const config = getGuildConfig(inter.guildId);
-    const sentInMusicChannel = !!config && config.queue_channel_id === inter.channelId;
+    const sentInMusicChannel =
+      !!config && config.queue_channel_id === inter.channelId;
 
     if (isDjCommand && !sentInMusicChannel) {
       return inter.editReply({
@@ -89,7 +89,7 @@ module.exports = async (client, inter) => {
       if (
         inter.guild.members.me.voice.channel &&
         inter.member.voice.channel.id !==
-        inter.guild.members.me.voice.channel.id
+          inter.guild.members.me.voice.channel.id
       )
         return inter.editReply({
           embeds: [
@@ -103,7 +103,14 @@ module.exports = async (client, inter) => {
     command.execute({ inter, client });
   }
   if (inter.type === InteractionType.MessageComponent) {
-    const customId = JSON.parse(inter.customId);
+    let customId;
+    try {
+      customId = JSON.parse(inter.customId);
+    } catch (e) {
+      customId = null;
+    }
+    if (!customId) return;
+
     const file_of_button = customId.ffb;
     const queue = useQueue(inter.guild);
 

@@ -46,6 +46,13 @@ const initSchemaStructure = function () {
     data TEXT
   )`,
   ).run();
+
+  db.prepare(
+    `CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      xp INTEGER
+    )`,
+  ).run();
 };
 
 const initDB = function () {
