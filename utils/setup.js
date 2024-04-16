@@ -122,7 +122,7 @@ const setupModeration = async function (client, inter) {
   });
 
   if (roleMuted !== null && !existingMutedRole) {
-    notice += `Created a muted role <@${roleMuted.id}>\n`;
+    notice += `Created a muted role <@&${roleMuted.id}>\n`;
 
     await inter.editReply({
       content: notice,
