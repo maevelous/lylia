@@ -7,5 +7,5 @@ package-lock.json
 yarn.lock
 
 # config files
-config.js
+/config.js
 .env
