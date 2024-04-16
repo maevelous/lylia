@@ -36,7 +36,7 @@ module.exports = async (client, message) => {
   if (isMusicChannel) handleMusicSuggestion(message, queue);
 
   const time = messages.get(message.author.id);
-  // if (time && new Date().getTime() - time < 10_000) return;
+  if (time && new Date().getTime() - time < 10_000) return;
 
   grantExp(message);
   messages.set(message.author.id, new Date().getTime());
