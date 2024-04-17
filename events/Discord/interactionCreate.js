@@ -18,7 +18,7 @@ module.exports = async (client, inter) => {
       !!config && config.queue_channel_id === inter.channelId;
 
     if (isDjCommand && !sentInMusicChannel) {
-      return inter.editReply({
+      return inter.reply({
         embeds: [
           new EmbedBuilder()
             .setColor("#ff0000")
@@ -31,7 +31,7 @@ module.exports = async (client, inter) => {
     }
 
     if (!isDjCommand && sentInMusicChannel) {
-      return inter.editReply({
+      return inter.reply({
         embeds: [
           new EmbedBuilder()
             .setColor("#ff0000")
@@ -45,7 +45,7 @@ module.exports = async (client, inter) => {
 
     if (!command)
       return (
-        inter.editReply({
+        inter.reply({
           embeds: [
             new EmbedBuilder()
               .setColor("#ff0000")
@@ -60,7 +60,7 @@ module.exports = async (client, inter) => {
       command.permissions &&
       !inter.member.permissions.has(command.permissions)
     )
-      return inter.editReply({
+      return inter.reply({
         embeds: [
           new EmbedBuilder()
             .setColor("#ff0000")
@@ -78,7 +78,7 @@ module.exports = async (client, inter) => {
         inter.guild.roles.cache.find((x) => x.name === DJ.roleName).id,
       )
     )
-      return inter.editReply({
+      return inter.reply({
         embeds: [
           new EmbedBuilder()
             .setColor("#ff0000")
@@ -91,7 +91,7 @@ module.exports = async (client, inter) => {
 
     if (command.voiceChannel) {
       if (!inter.member.voice.channel)
-        return inter.editReply({
+        return inter.reply({
           embeds: [
             new EmbedBuilder()
               .setColor("#ff0000")
@@ -104,7 +104,7 @@ module.exports = async (client, inter) => {
         inter.member.voice.channel.id !==
           inter.guild.members.me.voice.channel.id
       )
-        return inter.editReply({
+        return inter.reply({
           embeds: [
             new EmbedBuilder()
               .setColor("#ff0000")
