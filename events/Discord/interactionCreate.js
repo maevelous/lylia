@@ -7,9 +7,6 @@ module.exports = async (client, inter) => {
   if (inter.type === InteractionType.ApplicationCommand) {
     const DJ = client.config.opt.DJ;
     const command = client.commands.get(inter.commandName);
-    await inter.deferReply({
-      ephemeral: command.ephemeral,
-    });
 
     const djCommands = fs.readdirSync("./commands/music").map((x) => {
       return require(`../../commands/music/${x}`);
@@ -33,6 +30,19 @@ module.exports = async (client, inter) => {
       });
     }
 
+    if (!isDjCommand && sentInMusicChannel) {
+      return inter.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor("#ff0000")
+            .setDescription(
+              `❌ | Non-music commands can't be used in <#${config.queue_channel_id}>`,
+            ),
+        ],
+        ephemeral: true,
+      });
+    }
+
     if (!command)
       return (
         inter.editReply({
@@ -45,6 +55,7 @@ module.exports = async (client, inter) => {
         }),
         client.slash.delete(inter.commandName)
       );
+
     if (
       command.permissions &&
       !inter.member.permissions.has(command.permissions)
@@ -59,6 +70,7 @@ module.exports = async (client, inter) => {
         ],
         ephemeral: true,
       });
+
     if (
       DJ.enabled &&
       DJ.commands.includes(command) &&
@@ -76,6 +88,7 @@ module.exports = async (client, inter) => {
         ],
         ephemeral: true,
       });
+
     if (command.voiceChannel) {
       if (!inter.member.voice.channel)
         return inter.editReply({
@@ -100,6 +113,10 @@ module.exports = async (client, inter) => {
           ephemeral: true,
         });
     }
+
+    await inter.deferReply({
+      ephemeral: command.ephemeral,
+    });
     command.execute({ inter, client });
   }
   if (inter.type === InteractionType.MessageComponent) {
