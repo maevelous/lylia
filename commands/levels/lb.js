@@ -48,7 +48,7 @@ module.exports = {
     const paginator = new Paginator();
     paginator.listToEmbeds(all, "", {
       color: colors.default,
-      title: `Leaderboard - ${entries.length} ${entries.length === 1 ? "user" : "users"}`,
+      title: `Leaderboard - ${all.length} ${all.length === 1 ? "user" : "users"}`,
     });
     paginator.paginate({ client, interaction: inter });
   },
