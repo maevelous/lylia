@@ -1,32 +1,28 @@
 const { EmbedBuilder } = require("discord.js");
+const { colors } = require("../../utils/entities");
 
 module.exports = {
   name: "help",
   ephemeral: false,
-  description: "All the commands this bot has!",
+  description: "Lists all the commands this bot has!",
   showHelp: false,
 
   execute({ client, inter }) {
     const commands = client.commands.filter((x) => x.showHelp !== false);
 
     const embed = new EmbedBuilder()
-      .setColor("#ff0000")
+      .setColor(colors.default)
       .setAuthor({
         name: client.user.username,
         iconURL: client.user.displayAvatarURL({ size: 1024, dynamic: true }),
       })
-      .setDescription("100% made by maeve")
       .addFields([
         {
           name: `Enabled - ${commands.size}`,
           value: commands.map((x) => `\`${x.name}\``).join(" | "),
         },
       ])
-      .setTimestamp()
-      .setFooter({
-        text: "100% MADE BY MAEVE NO CAP",
-        iconURL: inter.member.avatarURL({ dynamic: true }),
-      });
+      .setTimestamp();
 
     inter.editReply({ embeds: [embed] });
   },
