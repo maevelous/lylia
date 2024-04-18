@@ -59,6 +59,9 @@ module.exports = {
     const kicks = auditLogs.filter((x) => x.action === "kick").length;
     const bans = auditLogs.filter((x) => x.action === "ban").length;
 
+    const createdAt = user.createdAt;
+    const timeStamp = `<t:${Math.floor(createdAt.getTime() / 1000)}:R>`;
+
     let { guild, global } = await getLbPosition(user, inter.guild.id);
     if (guild < 0) guild = "N/A";
     if (global < 0) global = "N/A";
@@ -68,6 +71,11 @@ module.exports = {
       .setTitle(`${user.username}'s Profile`)
       .setColor(colors.default)
       .addFields(
+        {
+          name: "Created At",
+          value: `${timeStamp}`,
+          inline: true,
+        },
         {
           name: "Level",
           value: `${level}`,
