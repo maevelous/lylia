@@ -50,7 +50,8 @@ const initSchemaStructure = function () {
   db.prepare(
     `CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
-      xp INTEGER
+      xp INTEGER,
+      username VARCHAR(100)
     )`,
   ).run();
 };

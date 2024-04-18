@@ -13,7 +13,7 @@ const grantExp = function (message) {
   const xp = Math.floor(Math.random() * 10) + 15;
   const newExp = exp + xp;
 
-  updateUserExp(message.author.id, newExp);
+  updateUserExp(message.author, newExp);
   levelUpNotice(exp, newExp, { message, user: message.author });
 };
 

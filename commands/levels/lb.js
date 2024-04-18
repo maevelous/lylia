@@ -9,7 +9,7 @@ const filterUsersByGuild = async function (users, guildId) {
     return client.guilds.cache
       .get(guildId)
       .members.fetch(x.id)
-      .then((m) => m)
+      .then(() => x)
       .catch(() => null);
   });
 
@@ -35,20 +35,21 @@ module.exports = {
 
     const entries = getAllUsers();
     const sorted = entries.sort((a, b) => b.xp - a.xp);
-    const res = sorted.map((x) => {
-      return `<@${x.id}> - Level ${expToLevels(x.xp)} - ${x.xp} XP`;
-    });
 
     const all = global
-      ? res
+      ? sorted
       : (await filterUsersByGuild(entries, inter.guild.id)).filter(
           (x) => x !== null,
         );
 
+    const res = all.map((x) => {
+      return `${x.username} - Level ${expToLevels(x.xp)} - ${x.xp} XP`;
+    });
+
     const paginator = new Paginator();
-    paginator.listToEmbeds(all, "", {
+    paginator.listToEmbeds(res, "", {
       color: colors.default,
-      title: `Leaderboard - ${all.length} ${all.length === 1 ? "user" : "users"}`,
+      title: `Leaderboard - ${res.length} ${res.length === 1 ? "user" : "users"}`,
     });
     paginator.paginate({ client, interaction: inter });
   },

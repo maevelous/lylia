@@ -5,13 +5,13 @@ const getUserExp = function (userId) {
   return stmt.get(userId);
 };
 
-const updateUserExp = function (userId, exp) {
+const updateUserExp = function (user, exp) {
   if (!db) return;
 
   const stmt = db.prepare(
-    `INSERT OR REPLACE INTO users (xp, id) VALUES (?, ?)`,
+    `INSERT OR REPLACE INTO users (id, username, xp) VALUES (?, ?, ?)`,
   );
-  stmt.run(exp, userId);
+  stmt.run(user.id, user.username, exp);
 };
 
 const getAllUsers = function () {
