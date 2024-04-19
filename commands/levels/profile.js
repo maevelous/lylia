@@ -6,15 +6,15 @@ const { colors } = require("../../utils/entities");
 const { COMMAND_OPTIONS } = require("../../enums");
 
 const filterUsersByGuild = async function (users, guildId) {
-  const promises = users.map(async (x) => {
-    return client.guilds.cache
-      .get(guildId)
-      .members.fetch(x.id)
-      .then((m) => m)
-      .catch(() => null);
-  });
+  const members = await client.guilds.cache
+    .get(guildId)
+    .members.fetch()
+    .catch(() => null);
+  if (!members) return [];
 
-  return Promise.all(promises);
+  return users.filter((user) =>
+    members.some((member) => member.id === user.id),
+  );
 };
 
 const getLbPosition = async function (user, guildId) {
