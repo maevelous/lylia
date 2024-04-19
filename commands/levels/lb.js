@@ -6,15 +6,15 @@ const { COMMAND_OPTIONS } = require("../../enums");
 const { shortenNum } = require("../../utils/levels");
 
 const filterUsersByGuild = async function (users, guildId) {
-  const promises = users.map(async (x) => {
-    return client.guilds.cache
-      .get(guildId)
-      .members.fetch(x.id)
-      .then(() => x)
-      .catch(() => null);
-  });
+  const members = await client.guilds.cache
+    .get(guildId)
+    .members.fetch()
+    .catch(() => null);
+  if (!members) return [];
 
-  return Promise.all(promises);
+  return users.filter((user) =>
+    members.some((member) => member.id === user.id),
+  );
 };
 
 module.exports = {
@@ -42,6 +42,8 @@ module.exports = {
       : (await filterUsersByGuild(entries, inter.guild.id)).filter(
           (x) => x !== null,
         );
+
+    if (!all || all.length === 0) return inter.deleteReply();
 
     const res = all.map((x) => {
       return `${x.username} - Level ${expToLevels(x.xp)} - ${shortenNum(x.xp, true)} XP`;
