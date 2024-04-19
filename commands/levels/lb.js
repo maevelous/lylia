@@ -3,6 +3,7 @@ const Paginator = require("../../classes/Paginator");
 const { expToLevels } = require("../../utils/levels");
 const { colors } = require("../../utils/entities");
 const { COMMAND_OPTIONS } = require("../../enums");
+const { shortenNum } = require("../../utils/levels");
 
 const filterUsersByGuild = async function (users, guildId) {
   const promises = users.map(async (x) => {
@@ -43,7 +44,7 @@ module.exports = {
         );
 
     const res = all.map((x) => {
-      return `${x.username} - Level ${expToLevels(x.xp)} - ${x.xp} XP`;
+      return `${x.username} - Level ${expToLevels(x.xp)} - ${shortenNum(x.xp, true)} XP`;
     });
 
     const paginator = new Paginator();

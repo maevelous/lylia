@@ -11,6 +11,10 @@ const emotes = {
 
 const colors = {
   default: "#2B2D31",
+  error: "#FF0000",
+  success: "#00FF00",
+  warning: "#FFFF00",
+  info: "#00FFFF",
 };
 
 module.exports = { emotes, colors };

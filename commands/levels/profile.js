@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { expToLevels } = require("../../utils/levels");
+const { expToLevels, shortenNum } = require("../../utils/levels");
 const { getUserExp, getAllUsers } = require("../../utils/db/levels");
 const { getAuditLogForUser } = require("../../utils/db/audit");
 const { colors } = require("../../utils/entities");
@@ -50,7 +50,7 @@ module.exports = {
     const user = inter.options.getUser("user") || inter.user;
 
     const exp = getUserExp(user.id);
-    const level = expToLevels(exp.xp);
+    const level = expToLevels(exp?.xp ?? 0);
 
     const auditLogs = getAuditLogForUser(user.id);
     const modActionsTaken = auditLogs.length;
@@ -83,7 +83,7 @@ module.exports = {
         },
         {
           name: "XP",
-          value: `${exp.xp}`,
+          value: `${shortenNum(exp?.xp ?? 0, true)}`,
           inline: true,
         },
         {
