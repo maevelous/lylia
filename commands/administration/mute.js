@@ -2,6 +2,7 @@ const { getGuildConfig } = require("../../utils/db/config");
 const { newLogNotice } = require("../../utils/logs");
 const { COMMAND_OPTIONS, MOD_ACTION } = require("../../enums");
 const { muteNotice } = require("../../utils/modnotices");
+const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
   name: "mute",
@@ -24,7 +25,7 @@ module.exports = {
   ],
 
   async execute({ client, inter }) {
-    if (!inter.member.permissions.has("ADMINISTRATOR"))
+    if (!inter.member.permissions.has(PermissionsBitField.Flags.Administrator))
       return inter.editReply({
         content: "Insufficient permissions",
       });

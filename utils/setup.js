@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { AttachmentBuilder, ChannelType, EmbedBuilder } = require("discord.js");
+const { PermissionsBitField, AttachmentBuilder, ChannelType, EmbedBuilder } = require("discord.js");
 const { useQueue } = require("discord-player");
 const { updateQueue } = require("../utils/queue");
 const { getEmbedControls } = require("../utils/misc");
@@ -12,7 +12,7 @@ const { colors } = require("../utils/entities");
 const setupMusicChannel = async function (_, inter) {
   const queue = useQueue(inter.guild);
 
-  if (!inter.member.permissions.has("ADMINISTRATOR"))
+  if (!inter.member.permissions.has(PermissionsBitField.Flags.Administrator))
     return inter.editReply({
       content: "Please ask an administrator to run the setup.",
     });
@@ -90,7 +90,7 @@ const setupMusicChannel = async function (_, inter) {
 };
 
 const setupModeration = async function (client, inter) {
-  if (!inter.member.permissions.has("ADMINISTRATOR"))
+  if (!inter.member.permissions.has(PermissionsBitField.Flags.Administrator))
     return inter.editReply({
       content: "Please ask an administrator to run the setup.",
     });

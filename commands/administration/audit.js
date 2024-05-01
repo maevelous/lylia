@@ -1,5 +1,5 @@
 const { getAuditLogForUserInGuild } = require("../../utils/db/audit");
-const { EmbedBuilder } = require("discord.js");
+const { PermissionsBitField, EmbedBuilder } = require("discord.js");
 const { MOD_ACTION } = require("../../enums");
 const { COMMAND_OPTIONS } = require("../../enums");
 
@@ -18,7 +18,7 @@ module.exports = {
   ],
 
   async execute({ client, inter }) {
-    if (!inter.member.permissions.has("ADMINISTRATOR"))
+    if (!inter.member.permissions.has(PermissionsBitField.Flags.Administrator))
       return inter.editReply({
         content: "Insufficient permissions",
       });

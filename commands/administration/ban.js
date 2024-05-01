@@ -1,6 +1,7 @@
 const { newLogNotice } = require("../../utils/logs");
 const { COMMAND_OPTIONS, MOD_ACTION } = require("../../enums");
 const { banNotice } = require("../../utils/modnotices");
+const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
   name: "ban",
@@ -23,7 +24,7 @@ module.exports = {
   ],
 
   async execute({ client, inter }) {
-    if (!inter.member.permissions.has("ADMINISTRATOR"))
+    if (!inter.member.permissions.has(PermissionsBitField.Flags.Administrator))
       return inter.editReply({
         content: "Insufficient permissions",
       });
