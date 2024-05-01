@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js);
+const { PermissionsBitField } = require("discord.js");
 const { cleanChannel } = require("../../utils/misc")
 
 module.exports = {
